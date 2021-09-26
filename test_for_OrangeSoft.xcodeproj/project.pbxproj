@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7195EC3D2700E14D00564B39 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195EC3C2700E14D00564B39 /* LoginViewController.swift */; };
+		7195EC432700E15B00564B39 /* TownTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7195EC3F2700E15B00564B39 /* TownTableViewCell.xib */; };
+		7195EC442700E15B00564B39 /* Town.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195EC402700E15B00564B39 /* Town.swift */; };
+		7195EC452700E15B00564B39 /* TownDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195EC412700E15B00564B39 /* TownDescriptionViewController.swift */; };
+		7195EC462700E15B00564B39 /* TownTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7195EC422700E15B00564B39 /* TownTableViewCell.swift */; };
 		71E6AB0826F7692700E0DC44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E6AB0726F7692700E0DC44 /* AppDelegate.swift */; };
 		71E6AB0A26F7692700E0DC44 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E6AB0926F7692700E0DC44 /* SceneDelegate.swift */; };
 		71E6AB0C26F7692700E0DC44 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E6AB0B26F7692700E0DC44 /* ViewController.swift */; };
@@ -16,6 +21,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7195EC3C2700E14D00564B39 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		7195EC3F2700E15B00564B39 /* TownTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TownTableViewCell.xib; sourceTree = "<group>"; };
+		7195EC402700E15B00564B39 /* Town.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Town.swift; sourceTree = "<group>"; };
+		7195EC412700E15B00564B39 /* TownDescriptionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TownDescriptionViewController.swift; sourceTree = "<group>"; };
+		7195EC422700E15B00564B39 /* TownTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TownTableViewCell.swift; sourceTree = "<group>"; };
 		71E6AB0426F7692700E0DC44 /* test_for_OrangeSoft.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test_for_OrangeSoft.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		71E6AB0726F7692700E0DC44 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		71E6AB0926F7692700E0DC44 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +70,11 @@
 				71E6AB0926F7692700E0DC44 /* SceneDelegate.swift */,
 				71E6AB0B26F7692700E0DC44 /* ViewController.swift */,
 				71E6AB0D26F7692700E0DC44 /* Main.storyboard */,
+				7195EC402700E15B00564B39 /* Town.swift */,
+				7195EC412700E15B00564B39 /* TownDescriptionViewController.swift */,
+				7195EC422700E15B00564B39 /* TownTableViewCell.swift */,
+				7195EC3F2700E15B00564B39 /* TownTableViewCell.xib */,
+				7195EC3C2700E14D00564B39 /* LoginViewController.swift */,
 				71E6AB1026F7693000E0DC44 /* Assets.xcassets */,
 				71E6AB1226F7693000E0DC44 /* LaunchScreen.storyboard */,
 				71E6AB1526F7693000E0DC44 /* Info.plist */,
@@ -125,6 +140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				71E6AB1426F7693000E0DC44 /* LaunchScreen.storyboard in Resources */,
+				7195EC432700E15B00564B39 /* TownTableViewCell.xib in Resources */,
 				71E6AB1126F7693000E0DC44 /* Assets.xcassets in Resources */,
 				71E6AB0F26F7692700E0DC44 /* Main.storyboard in Resources */,
 			);
@@ -137,9 +153,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7195EC3D2700E14D00564B39 /* LoginViewController.swift in Sources */,
 				71E6AB0C26F7692700E0DC44 /* ViewController.swift in Sources */,
 				71E6AB0826F7692700E0DC44 /* AppDelegate.swift in Sources */,
+				7195EC452700E15B00564B39 /* TownDescriptionViewController.swift in Sources */,
+				7195EC442700E15B00564B39 /* Town.swift in Sources */,
 				71E6AB0A26F7692700E0DC44 /* SceneDelegate.swift in Sources */,
+				7195EC462700E15B00564B39 /* TownTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
