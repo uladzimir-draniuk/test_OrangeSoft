@@ -73,23 +73,22 @@ class Town {
  */
 
 class TownNew: Object {
-    @objc dynamic var temperature: Double = 0
-    @objc dynamic var date: Date = Date.distantPast
-    @objc dynamic var city: String = ""
-    @objc dynamic var code: String = ""
+    @Persisted var temperature: Double = 0
+    @Persisted var date = Date()
+    @Persisted (primaryKey: true) var city: String = ""
+    @Persisted var code: String = ""
     var iconUrl: URL? { URL(string: "https://openweathermap.org/img/wn/\(iconString)@2x.png") }
-    @objc private dynamic var iconString: String = ""
+    @Persisted private var iconString: String = ""
  
     convenience init(json: SwiftyJSON.JSON, city: String) {
         self.init()
         
-        self.date = Date(timeIntervalSince1970: json["dt"].doubleValue)
-        self.temperature = json["main"]["temp"].doubleValue
+        let containerDate = json["list"].arrayValue.first
+        self.date = Date()
+        self.temperature = containerDate?["main"]["temp"].doubleValue ?? 0
         self.city = city
-        self.code = json["sys"]["country"].stringValue
-        let firstWeatherJson = json["weather"].arrayValue.first
-        self.iconString = firstWeatherJson?["icon"].stringValue ?? ""
+        self.code = json["city"]["country"].stringValue
+        let weatherJson = containerDate?["weather"].arrayValue.first
+        self.iconString = weatherJson?["icon"].stringValue ?? ""
     }
 }
-
-

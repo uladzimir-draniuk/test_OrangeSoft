@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import RealmSwift
+import Kingfisher
 
 class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -30,6 +32,10 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
     
     let weatherApi = ApiWeatherFunc()
     
+    var townNew: TownNew?
+    var loadedTown: TownNew!
+    
+    private var notification: NotificationToken?
    
     @IBOutlet var townDescrView: UIView!
     
@@ -51,7 +57,6 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         townDescrView.addGestureRecognizer(tapRecognizer)
-  
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -72,14 +77,68 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
 
-        weatherApi.loadCityTemp(cityName: self.towns[indexPath.item].name, code: self.towns[indexPath.item].code)
-        cityName.text = towns[indexPath.item].name
-        cityCode.text = towns[indexPath.item].code
-        cityTemp.text = String(towns[indexPath.item].temp) + "\u{00B0}" + "C"
+        if let casheTowns = try? Realm(configuration: RealmAdds.deleteIfMigration).objects(TownNew.self)
+        {
+            if let town = casheTowns.filter("city = %@", towns[indexPath.item].name).first
+            {
+                if !checkIsNeedToUpdateWeather(date: town.date)
+                {
+                    townNew = town
+                    configureTownView(town: townNew!)
+                }
+            }
+            else
+            {
+                downloadWeather(forTown: self.towns[indexPath.item])
+            }
+        }
+        else
+        {
+           print("There are any troubles with opening Realm base")
+        }
+    }
+        
+    func checkIsNeedToUpdateWeather(date: Date) -> Bool
+    {
+        let delta = date.distance(to: Date())
+        print("delta = \(delta)")
+        return delta > 3600
+    }
+    
+    func downloadWeather(forTown: Town )
+    {
+        weatherApi.loadCity(cityName: forTown.name, code: forTown.code, completion: { [self] result in
+            switch result {
+            case let .failure(error):
+                print(error)
+            case let .success(loadedTown):
+                try? RealmAdds.save(item: loadedTown, configuration: RealmAdds.deleteIfMigration, update: .all)
+                configureTownView(town: loadedTown)
+            }
+        })
+    }
+
+    func configureTownView(town: TownNew) {
+ 
+        cityName.text = town.city
+        cityCode.text = town.code
+        cityTemp.text = String(town.temperature) + "\u{00B0}" + "C"
         cityDescription.text = desc
+        weatherImage.kf.setImage(with: town.iconUrl)
         townDescrView.setNeedsDisplay()
     }
+    
+    
+    
+//    func checkIsNeedToLoad(town: Results<TownNew>) -> Bool {
+//        var result = true
+//        let currentDate = Date()
+////        let limit = currentDate - town.date
+////        if limit > 1
+//        return result
+//    }
      
     @IBOutlet var townDescrViewHeightSmall: NSLayoutConstraint!
     
