@@ -18,7 +18,6 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var textPassword: UITextField!
     @IBOutlet weak var resultText: UITextField!
       
-    
 
     @IBAction func check(_ sender: Any) {
         loginView.endEditing(true)
@@ -40,5 +39,4 @@ class LoginViewController: UIViewController {
         }
         super.touchesBegan(touches, with: event)
     }
-    
 }

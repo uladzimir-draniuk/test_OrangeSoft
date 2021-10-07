@@ -29,14 +29,8 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
         Town(name: "Helsinki", code: "FI", temp: 18)
     ]
     
-    
     let weatherApi = ApiWeatherFunc()
-    
-    var townNew: TownNew?
-    var loadedTown: TownNew!
-    
-    private var notification: NotificationToken?
-   
+
     @IBOutlet var townDescrView: UIView!
     
     @IBOutlet var tableView: UITableView!
@@ -69,24 +63,26 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TownCell", for: indexPath) as! TownTableViewCell
-   
-    cell.cityName.text = towns[indexPath.item].name
-    cell.cityCode.text = towns[indexPath.item].code
-    
-    return cell
+        
+        cell.cityName.text = towns[indexPath.item].name
+        cell.cityCode.text = towns[indexPath.item].code
+        
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-
         if let casheTowns = try? Realm(configuration: RealmAdds.deleteIfMigration).objects(TownNew.self)
         {
             if let town = casheTowns.filter("city = %@", towns[indexPath.item].name).first
             {
                 if !checkIsNeedToUpdateWeather(date: town.date)
                 {
-                    townNew = town
-                    configureTownView(town: townNew!)
+                    configureTownView(town: town)
+                }
+                else
+                {
+                    downloadWeather(forTown: self.towns[indexPath.item])
                 }
             }
             else
@@ -96,10 +92,10 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
         }
         else
         {
-           print("There are any troubles with opening Realm base")
+            print("There are any troubles with opening Realm base")
         }
     }
-        
+    
     func checkIsNeedToUpdateWeather(date: Date) -> Bool
     {
         let delta = date.distance(to: Date())
@@ -114,40 +110,30 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
             case let .failure(error):
                 print(error)
             case let .success(loadedTown):
-                try? RealmAdds.save(item: loadedTown, configuration: RealmAdds.deleteIfMigration, update: .all)
+                try? RealmAdds.save(item: loadedTown, configuration: RealmAdds.deleteIfMigration, update: .modified)
                 configureTownView(town: loadedTown)
             }
         })
     }
-
+    
     func configureTownView(town: TownNew) {
- 
+        
         cityName.text = town.city
         cityCode.text = town.code
-        cityTemp.text = String(town.temperature) + "\u{00B0}" + "C"
+        cityTemp.text = String(Int(town.temperature)) + "\u{00B0}" + "C"
         cityDescription.text = desc
         weatherImage.kf.setImage(with: town.iconUrl)
         townDescrView.setNeedsDisplay()
     }
     
     
-    
-//    func checkIsNeedToLoad(town: Results<TownNew>) -> Bool {
-//        var result = true
-//        let currentDate = Date()
-////        let limit = currentDate - town.date
-////        if limit > 1
-//        return result
-//    }
-     
     @IBOutlet var townDescrViewHeightSmall: NSLayoutConstraint!
-    
     @IBOutlet var townDescrViewHeightBig: NSLayoutConstraint!
     
     var isTap = false
     
     @IBAction func handleTap(_ gesture: UITapGestureRecognizer) {
- 
+        
         UIView.animate(
             withDuration: 1.0,
             animations:
@@ -157,17 +143,17 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
                         self.view.removeConstraint(self.townDescrViewHeightBig)
                         self.view.addConstraint(self.townDescrViewHeightSmall)
                     }
-                    else {
+                    else
+                    {
                         self.view.removeConstraint(self.townDescrViewHeightSmall)
                         self.view.addConstraint(self.townDescrViewHeightBig)
                     }
                     self.view.layoutIfNeeded()
                 },
             completion: nil)
-            
+        
         self.isTap.toggle()
-      }
-
- }
+    }
+}
 
 
