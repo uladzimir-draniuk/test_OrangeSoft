@@ -9,7 +9,7 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
-    let loginName = "orangesoft@yandex.by"
+    let loginName = "test@test.com"
     let loginPassword = "test"
 
     @IBOutlet weak var loginView: UIView!
