@@ -1,0 +1,62 @@
+[
+    {
+        "city" : "Moscow",
+        "code" : "RU"
+    },
+    {
+        "city" : "Minsk",
+        "code" : "BY"
+    },
+    {
+        "city" : "Chicago",
+        "code" : "US"
+    },
+    {
+        "city" : "Brest",
+        "code" : "BY"
+    },
+    {
+        "city" : "Berlin",
+        "code" : "DE"
+    },
+    {
+        "city" : "Ottava",
+        "code" : "CA"
+    },
+    {
+        "city" : "Oslo",
+        "code" : "NO"
+    },
+    {
+        "city" : "Sochi",
+        "code" : "RU"
+    },
+    {
+        "city" : "Baghdad",
+        "code" : "IQ"
+    },
+    {
+        "city" : "Kiev",
+        "code" : "UA"
+    },
+    {
+        "city" : "London",
+        "code" : "GB"
+    },
+    {
+        "city" : "Norilsk",
+        "code" : "RU"
+    },
+    {
+        "city" : "Paris",
+        "code" : "FR"
+    },
+    {
+        "city" : "Rome",
+        "code" : "IT"
+    },
+    {
+        "city" : "Helsinki",
+        "code" : "FI"
+    }
+]

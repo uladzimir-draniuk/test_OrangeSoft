@@ -9,16 +9,24 @@ import Foundation
 import SwiftyJSON
 import RealmSwift
 
-class Town {
+struct Town : Decodable {
     
-    let name: String
-    let code: String
-    let temp: Int
+    var city: String = ""
+    var code: String = ""
     
-    init(name: String, code: String, temp: Int ) {
-        self.name = name
-        self.code = code
-        self.temp = temp
+    enum myError : Error {
+        case incorrectName
+    }
+}
+
+extension Array where Element == Town {
+    init (withFile: String) throws {
+        guard let url = Bundle.main.url(forResource: withFile, withExtension: "json") else {
+            throw Town.myError.incorrectName
+        }
+        let decoder = JSONDecoder()
+        let data = try Data(contentsOf: url)
+        self = try decoder.decode([Town].self, from: data)
     }
 }
 

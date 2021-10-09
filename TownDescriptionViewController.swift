@@ -11,26 +11,27 @@ import Kingfisher
 
 class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    private var towns = [
-        Town(name: "Moscow", code: "RU", temp: 20),
-        Town(name: "Minsk", code: "BY", temp: 15),
-        Town(name: "Chicago", code: "US", temp: 14),
-        Town(name: "Brest", code: "BY", temp: 25),
-        Town(name: "Berlin", code: "DE", temp: 19),
-        Town(name: "Ottava", code: "CA", temp: 11),
-        Town(name: "Oslo", code: "NO", temp: 10),
-        Town(name: "Sochi", code: "RU", temp: 21),
-        Town(name: "Baghdad", code: "IQ", temp: 16),
-        Town(name: "Kiev", code: "UA", temp: 13),
-        Town(name: "London", code: "GB", temp: 9),
-        Town(name: "Norilsk", code: "RU", temp: 5),
-        Town(name: "Paris", code: "FR", temp: 17),
-        Town(name: "Rome", code: "IT", temp: 27),
-        Town(name: "Helsinki", code: "FI", temp: 18)
-    ]
+    /*
+     Здесь ранее было выражение:
+     var towns = try! [Town](withFile: "town1s")
+     Именно так нам показывал на уроке преподователь, хотя и добавил при этом,
+     что это неправильно и хороший программист не должен использовать форс анрап.
+     Но времени у него было мало и поэтому он решил не искать выход из ситуации...
+     А я вроде нашел выход, пусть и не элегантный, но всё приходит с опытом )
+     */
     
-    let weatherApi = ApiWeatherFunc()
+    let defaultTown = Town(city: "", code: "")
+    private var defaultTowns: [Town] {
+        get
+        {
+           return [ defaultTown ]
+        }
+    }
+    
+    var towns = try? [Town](withFile: "towns")
 
+    let weatherApi = ApiWeatherFunc()
+    
     @IBOutlet var townDescrView: UIView!
     
     @IBOutlet var tableView: UITableView!
@@ -58,14 +59,14 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return towns.count
+        return towns?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TownCell", for: indexPath) as! TownTableViewCell
         
-        cell.cityName.text = towns[indexPath.item].name
-        cell.cityCode.text = towns[indexPath.item].code
+        cell.cityName.text = towns?[indexPath.item].city
+        cell.cityCode.text = towns?[indexPath.item].code
         
         return cell
     }
@@ -74,7 +75,7 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
         
         if let casheTowns = try? Realm(configuration: RealmAdds.deleteIfMigration).objects(TownNew.self)
         {
-            if let town = casheTowns.filter("city = %@", towns[indexPath.item].name).first
+            if let town = casheTowns.filter("city = %@", towns?[indexPath.item].city ?? "empty").first
             {
                 if !checkIsNeedToUpdateWeather(date: town.date)
                 {
@@ -82,12 +83,12 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
                 }
                 else
                 {
-                    downloadWeather(forTown: self.towns[indexPath.item])
+                    downloadWeather(forTown: self.towns?[indexPath.item] ?? defaultTown)
                 }
             }
             else
             {
-                downloadWeather(forTown: self.towns[indexPath.item])
+                downloadWeather(forTown: self.towns?[indexPath.item] ?? defaultTown)
             }
         }
         else
@@ -105,7 +106,7 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
     
     func downloadWeather(forTown: Town )
     {
-        weatherApi.loadCity(cityName: forTown.name, code: forTown.code, completion: { [self] result in
+        weatherApi.loadCity(cityName: forTown.city, code: forTown.code, completion: { [self] result in
             switch result {
             case let .failure(error):
                 print(error)
