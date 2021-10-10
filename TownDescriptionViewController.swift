@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import Kingfisher
+import MapKit
 
 class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -30,6 +31,8 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
     
     var towns = try? [Town](withFile: "towns")
 
+    var dataByMap : CLLocation?
+    
     let weatherApi = ApiWeatherFunc()
     
     @IBOutlet var townDescrView: UIView!
@@ -52,8 +55,26 @@ class TownDescriptionViewController: UIViewController, UITableViewDelegate, UITa
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         townDescrView.addGestureRecognizer(tapRecognizer)
+
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        if let loc = dataByMap
+        {
+            weatherApi.dataByLocation(location: loc, completion: { result in
+                switch result {
+                case let .failure(error):
+                    print(error)
+                case let .success(loadedTown):
+                    try? RealmAdds.save(item: loadedTown, configuration: RealmAdds.deleteIfMigration, update: .modified)
+                    self.configureTownView(town: loadedTown)
+                }
+            })
+        }
+    }
+    
+            
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
