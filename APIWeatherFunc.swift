@@ -8,6 +8,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import MapKit
 
 
 class ApiWeatherFunc {
@@ -41,29 +42,38 @@ class ApiWeatherFunc {
         }
     }
     
-    
-    func loadCityTemp(cityName: String, code: String) {
+    func dataByLocation (location: CLLocation,  completion: @escaping ((Result<TownNew, Error>) -> Void)) {
         
-        let params = cityName + "," + code
+//        let lat = Int(location.coordinate.latitude)
+//        let long = Int(location.coordinate.longitude)
+        let lat = location.coordinate.latitude
+        let long = location.coordinate.longitude
         
         let parameters: Parameters = [
-            "q": params,
+            "lat": lat,
+            "lon": long,
             "units": "metric",
             "appid": appId
         ]
         
-        let path = "/data/2.5/weather"
+        let path = "/data/2.5/forecast"
         
-        AF.request(scheme + host + path, method: .get, parameters: parameters).responseJSON { response in
+        AF.request(scheme + host + path, method: .get, parameters: parameters).response { response in
             switch response.result {
-            case .failure(let error):
-                print(error)
-            case .success(let json):
-                print(json)
+            case let .failure( error):
+                completion(.failure(error))
+            case let .success(data):
+                guard let data = data,
+                      let json = try? JSON(data: data) else { return }
+                let place = TownNew.init(json: json, city: "none")
+                print(place)
+                completion(.success(place))
             }
         }
     }
-}
+    
+    
+    }
 
 
 
